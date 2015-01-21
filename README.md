@@ -7,7 +7,7 @@ The project will provide implementations of the features in the **source** folde
 in the **test** folder.
 Database
 --------
-**TODO**: Link to the package
+**Package**: *de.minestar.core.database*
 
 Based on the ORM ORMLite http://ormlite.com/ the core provides a standard API to persist and read object to and from
 a database.
