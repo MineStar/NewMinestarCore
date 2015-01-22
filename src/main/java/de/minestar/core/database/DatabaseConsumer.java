@@ -132,7 +132,8 @@ public class DatabaseConsumer<T> implements Runnable {
      * Persists all objects in the queue ignoring the flush size.
      */
     public void flush() {
-        this.flush(queue.size());
+        while(!queue.isEmpty())
+            this.flush(queue.size());
     }
 
     @Override
@@ -162,7 +163,7 @@ public class DatabaseConsumer<T> implements Runnable {
                 stop();
             }
         }
-        if (!queue.isEmpty())
+        while (!queue.isEmpty())
             flush();
     }
 
