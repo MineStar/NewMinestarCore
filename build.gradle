@@ -11,15 +11,17 @@ targetCompatibility = '1.8'
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
     testCompile 'junit:junit:4.11'
 
     // Database dependencies
-    compile 'com.j256.ormlite:ormlite-jdbc:4.48'
+    compile 'com.j256.ormlite:ormlite-jdbc:4.49-SNAPSHOT'
     compile 'mysql:mysql-connector-java:5.1.34'
     compile 'org.xerial:sqlite-jdbc:3.8.7'
+    compile 'org.mariadb.jdbc:mariadb-java-client:1.1.7'
 
     compile 'org.jodd:jodd-json:3.6.3'
 }
