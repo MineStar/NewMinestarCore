@@ -72,7 +72,7 @@ public class MySqlConnection implements ConnectionSupplier {
      * @param password The password for authorization
      */
     public MySqlConnection(String host, int port, String database, String user, String password) {
-        this.jdbcUrl = "jdbc::mysql://" + host + ":" + port + "/" + database;
+        this.jdbcUrl = "jdbc:mysql://" + host + ":" + port + "/" + database;
 
         this.user = user;
         this.password = password;
