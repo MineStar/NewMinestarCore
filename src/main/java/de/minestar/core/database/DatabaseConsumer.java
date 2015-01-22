@@ -28,7 +28,10 @@ import com.j256.ormlite.dao.Dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -55,6 +58,7 @@ public class DatabaseConsumer<T> implements Runnable {
     private static final long DEFAULT_SLEEP_TIME_MILLIS = 50L;
     private static final int DEFAULT_FLUSH_SIZE = 32;
     private static final int IDLE_CYCLES_BEFORE_RESET = 10;
+    private static final int MAX_BUFFER_SIZE = 256;
 
     private final DatabaseAccess access;
     private final int flushSize;
@@ -167,12 +171,11 @@ public class DatabaseConsumer<T> implements Runnable {
     }
 
     private void flush(int queueSize) {
-
-        queue.drainTo(flushBuffer);
+        int elements = queue.drainTo(flushBuffer, Math.min(MAX_BUFFER_SIZE, queueSize));
         try {
             Dao<T, ?> dao = access.getDao(entityClass);
             dao.callBatchTasks(() -> {
-                for (int i = 0; i < queueSize; ++i) {
+                for (int i = 0; i < elements; ++i) {
                     dao.create(flushBuffer.get(i));
                 }
                 return null;
