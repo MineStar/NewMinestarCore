@@ -55,8 +55,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DatabaseConsumer<T> implements Runnable {
 
     private static final double TOO_MANY_ELEMENTS = 1.1;
-    private static final long DEFAULT_SLEEP_TIME_MILLIS = 50L;
-    private static final int DEFAULT_FLUSH_SIZE = 32;
+    private static final long DEFAULT_SLEEP_TIME_MILLIS = 25L;
+    private static final int DEFAULT_FLUSH_SIZE = 64;
     private static final int IDLE_CYCLES_BEFORE_RESET = 10;
     private static final int MAX_BUFFER_SIZE = 256;
 
@@ -132,7 +132,7 @@ public class DatabaseConsumer<T> implements Runnable {
      * Persists all objects in the queue ignoring the flush size.
      */
     public void flush() {
-        while(!queue.isEmpty())
+        while (!queue.isEmpty())
             this.flush(queue.size());
     }
 

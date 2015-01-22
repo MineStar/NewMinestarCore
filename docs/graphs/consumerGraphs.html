@@ -1,0 +1,60 @@
+<!--
+  ~ This file is licensed under the MIT License (MIT).
+  ~
+  ~ Copyright (c) Minestar.de <http://www.minestar.de/>
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link href="../c3.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="chart1"></div>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="../c3.min.js" charset="utf-8"></script>
+    <script>
+        var chart = c3.generate({
+            bindto: '#chart1',
+            data: {
+                columns: [
+                    ['MySQL ORMLite 4.48 - 256, 50ms',  1001, 1489, 1977, 2465, 2697, 3185, 3417, 3649, 4137, 4625, 4857, 5089, 5065, 5297, 5529, 5505, 5737, 5969, 5945, 5921, 6153, 6129, 6105, 6337, 6569, 6545, 6777, 7265, 7497, 7473, 7705, 7681, 7680, 6400, 5632, 4864, 3840, 2816, 1792, 1024, 256],
+                    ['MySQL ORMLite 4.48 - 128, 50ms',  1001, 1489, 1977, 2209, 2697, 2929, 3161, 3393, 3881, 4369, 4601, 4833, 4809, 5297, 5273, 5249, 5481, 5457, 5689, 5665, 5897, 6129, 6361, 6337, 6569, 6801, 7033, 7265, 7241, 7473, 7449, 7425, 7424, 6400, 5376, 4352, 3328, 2560, 1536, 768],
+                    ['MySQL ORMLite 4.48 - 64, 50ms',   1001, 1489, 1721, 1953, 2441, 2673, 2649, 3137, 3625, 3601, 3833, 3809, 4041, 4017, 4249, 4225, 4457, 4433, 4409, 4641, 4873, 4849, 5081, 5057, 5289, 5265, 5241, 5217, 5193, 5425, 5401, 5377, 5120, 4096, 3072, 2048, 1280, 256],
+                    ['MySQL ORMLite 4.48 - 32, 50ms',   1001, 1233, 1465, 1697, 2185, 2417, 2649, 3137, 3369, 3601, 3577, 3809, 3785, 3761, 3737, 3969, 3945, 3921, 3897, 3873, 3849, 4081, 4057, 4033, 4265, 4241, 4217, 4193, 4169, 4401, 4377, 4353, 4096, 3072, 2048, 1280, 256],
+                    ['MySQL ORMLite 4.48 - 256, 25ms',  1001, 1489, 1721, 1697, 1929, 1905, 2393, 2881, 2857, 2833, 2809, 2785, 3017, 2993, 2969, 2945, 2921, 2641, 2617, 2593, 2825, 2801, 2777, 2753, 2729, 2961, 2681, 2657, 2633, 2609, 2585, 2561, 2304, 1280, 256],
+                    ['MySQL ORMLite 4.48 - 128, 25ms',  1001, 1233, 1465, 1697, 1929, 2161, 2393, 2881, 3113, 3089, 3065, 3041, 3017, 2993, 2969, 2945, 3177, 3153, 3129, 3105, 3081, 3057, 3033, 3009, 2985, 2961, 2937, 2913, 2889, 2865, 3097, 3329, 3072, 2048, 1280, 256],
+                    ['MySQL ORMLite 4.48 - 64, 25ms',   1001, 1233, 1465, 1441, 1673, 1905, 2393, 2881, 2857, 2833, 2809, 2785, 2761, 2737, 2713, 2689, 2665, 2385, 2361, 2337, 2313, 2545, 2521, 2497, 2473, 2449, 2425, 2401, 2377, 2353, 2585, 2561, 2304, 1024, 256],
+                    ['MySQL ORMLite 4.48 - 32, 25ms',   1001, 1489, 1721, 1953, 2185, 2417, 2649, 2881, 3369, 3345, 3321, 3041, 3017, 2993, 2969, 2945, 2921, 2897, 2873, 2593, 2569, 2545, 2777, 2753, 2729, 2705, 2681, 2657, 2633, 2609, 2841, 2561, 2304, 1280, 256]
+                ],
+                type: 'line'
+            },
+            zoom: {
+                enabled: true
+            },
+            point: {
+                show: false
+            }
+        });        
+    </script>
+</body>
+</html>
