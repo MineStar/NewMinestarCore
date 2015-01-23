@@ -30,9 +30,11 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.lang.reflect.Field;
 import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.*;
 
 /**
  * Created by Kilian on 22.01.2015.
@@ -40,28 +42,69 @@ import java.util.concurrent.TimeUnit;
 public class HeavyConsumerTest {
 
     // Current amount of data in database
-    private static final int SAMPLE_SIZE = (int) Math.pow(2, 15);
+    private static final int SAMPLE_SIZE = (int) Math.pow(2, 21);
 
     public static void main(String[] args) throws Exception {
 
-        Map<Integer, Integer> testValues = new HashMap<>();
-        testValues.put(256, 50);
-        testValues.put(128, 50);
-        testValues.put(64, 50);
-        testValues.put(32, 50);
         ConnectionSupplier mariaDbConnection = new MariaDbConnection("192.168.1.29", 3307, "minestar_therock", "consumertest", "test");
         ConnectionSupplier mysqlDbConnection = new MySqlConnection("192.168.1.29", 3306, "minestar_therock", "consumertest", "test");
-        test(testValues, mysqlDbConnection, true);
-        testValues = new HashMap<>();
-        testValues.put(256, 25);
-        testValues.put(128, 25);
-        testValues.put(64, 25);
-        testValues.put(32, 25);
-        test(testValues, mysqlDbConnection, true);
+
+        ExecutorService threadPool = Executors.newFixedThreadPool(2);
+
+        Future<?> mySQL = threadPool.submit(() -> {
+            try {
+                generateData(new DatabaseAccess(mysqlDbConnection), "mySQL");
+            } catch (Exception e) {
+                System.out.println("shit1");
+                e.printStackTrace();
+            }
+        });
+        Thread.sleep(50);
+                Future<?> mariaDB = threadPool.submit(() -> {
+            try {
+                generateData(new DatabaseAccess(mariaDbConnection), "mariaDB");
+            } catch (Exception e) {
+                System.out.println("shit2");
+                e.printStackTrace();
+            }
+        });
     }
 
+    private static void generateData( DatabaseAccess access , String name) throws Exception {
+        System.out.println("Start generate " + name);
+        List<Integer> values = new LinkedList<>();
+        TableUtils.dropTable(access.getConnectionSource(), Block.class, true);
+        TableUtils.createTableIfNotExists(access.getConnectionSource(), Block.class);
+        DatabaseConsumer<Block> consumer = new DatabaseConsumer<>(access, Block.class);
+        DatabaseConsumer.kickOf(consumer);
+        long time = System.nanoTime();
+        for (int i = 0, j = 0; i < SAMPLE_SIZE; ++i, ++j) {
+            consumer.consume(generateBlock());
+            if (j == 1500) {
+                int size = queueSize(consumer);
+                values.add(size);
+                System.out.println(name + " :Sleep (i = " + i + ", Consumer Queue: " + size + ")");
+                Thread.sleep(900L + random.nextInt(100));
+                j = 0;
+            }
+        }
+        int size;
+        while ((size = queueSize(consumer)) >= 64) {
+            values.add(size);
+            System.out.println(name + " :Sleep (Consumer Queue: " + size + ")");
+            Thread.sleep(1000);
+        }
+        consumer.flush();
+        consumer.stop();
+        time = System.nanoTime() - (time);
+        time = time - TimeUnit.MILLISECONDS.toNanos(1000);
 
-    public static void test(Map<Integer, Integer> testValues, ConnectionSupplier supplier, boolean onlyResult) throws Exception {
+        System.out.println(name + ": " + values + ",");
+        System.out.println(name + ": " + Duration.ofNanos(time).toMillis() + " ms");
+        access.close();
+    }
+
+    private static void test(Map<Integer, Integer> testValues, ConnectionSupplier supplier, boolean onlyResult) throws Exception {
         for (Map.Entry<Integer, Integer> testValue : testValues.entrySet()) {
             int flushSize = testValue.getKey();
             int sleepTime = testValue.getValue();
