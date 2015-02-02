@@ -16,6 +16,32 @@ repositories {
     }
 }
 
+task sourceJar(type: Jar) {
+	from sourceSets.main.java
+	from sourceSets.main.resources
+	classifier = "sources"
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	from javadoc.destinationDir
+	classifier = "javadoc"
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+    tasks.withType(Javadoc) {
+        // disable the crazy super-strict doclint tool in Java 8
+        //noinspection SpellCheckingInspection
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+}
+
+
+artifacts {
+ 	archives jar
+    archives sourceJar
+    archives javadocJar
+}
+
 dependencies {
     testCompile 'junit:junit:4.11'
 
@@ -27,3 +53,4 @@ dependencies {
 
     compile 'org.jodd:jodd-json:3.6.3'
 }
+
